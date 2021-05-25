@@ -10,6 +10,12 @@ public class Punto
 		this.x = x;
 		this.y = y;
 	}
+
+	public Punto(){
+		x=0;
+		y=0;
+	}
+
 	
 	public double getX() {
 		return x;
