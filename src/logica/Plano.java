@@ -15,7 +15,7 @@ public class Plano {
 	 * 
 	 * @param p Punto a insertar.
 	 */
-	public void addPunto(Punto p) {
+	/*public void addPunto(Punto p) {
 		insertarOrdenado(p);
 	}
 	
@@ -34,7 +34,7 @@ public class Plano {
 		}
 		if (!insertado)
 			puntos.addLast(p);
-	}
+	}*/
 
 	public void addLast(Punto p) {
 		puntos.addLast(p);
@@ -225,5 +225,104 @@ public class Plano {
 				planoDerecho.addLast(p.element());
 			i++;
 		}
+	}
+
+	/**
+	 * Obtiene el par de menor distancia. Divide el plano en dos. Con ejes X e Y ordenados
+	 * 
+	 * @return Par de puntos de menor distancia.
+	 */
+	public Par menorDistanciaDivConOrdenado(Punto puntosY[]) {
+		Par toReturn = new Par();
+		long ini, fin;
+		int cantPuntos = puntos.size();
+
+		Punto p1 = new Punto();
+		Punto p2 = new Punto();
+
+		ini = System.currentTimeMillis();
+
+		if (cantPuntos < 2) { // Si tenemos menos de dos puntos no podemos obtener un par de puntos, por lo
+								// que se retorna la distancia mÃ¡xima
+			toReturn.setP1(p1);
+			toReturn.setP2(p2);
+			toReturn.setDistancia(Double.MAX_VALUE);
+		} else if (cantPuntos == 2) { // Si solo tenemos dos puntos, esa es la solucion
+			try
+			{
+				p1 = puntos.first().element();
+				p2 = puntos.last().element();
+				toReturn.setP1(p1);
+				toReturn.setP2(p2);
+				toReturn.setDistancia(p1.distancia(p2));
+			}
+			catch (EmptyListException e)
+			{
+				System.out.println(e.getMessage());
+			}
+		} else { // Si hay 3 o mas puntos
+			Par solIzq = new Par();
+			Par solDer = new Par();
+			Plano planoIzquierdo = new Plano();
+			Plano planoDerecho = new Plano();
+
+			subList(planoIzquierdo, planoDerecho);
+			
+			solIzq = planoIzquierdo.menorDistanciaDivConOrdenado(puntosY);
+			solDer = planoDerecho.menorDistanciaDivConOrdenado(puntosY);
+			
+			// Se guarda la menor distancia entre las soluciuones obtenidas
+			if (solIzq.getDistancia() < solDer.getDistancia()) {
+				toReturn = solIzq;
+			} else {
+				toReturn = solDer;
+			}
+
+			// Creamos el plano central a partir de la franja entre los dos planos
+			// anteriores
+			Punto pMedio = null;
+			try 
+			{
+				pMedio = planoIzquierdo.getPuntos().last().element();
+			} 
+			catch (EmptyListException e) 
+			{
+				System.out.println(e.getMessage());
+			}
+
+			
+
+			// Creamos un nuevo arreglo que contendra aquellos puntos que cumplan que la
+			// diferencia en valor
+			// absoluto de su componente x y la componente x del punto medio sea menor a la
+			// distancia minima
+			int i, j, count = 0;
+			Punto planoCentral[] = new Punto[puntosY.length];
+			for (i = 0; i < puntosY.length; i++) {
+				if (Math.abs(puntosY[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
+					planoCentral[i] = puntosY[i];
+				}
+			}
+
+			// Calculamos las distancias
+			double dist;
+			for (i = 0; i < planoCentral.length && planoCentral[i] != null; i++) {
+				count = 0;
+				for (j = i + 1; j < planoCentral.length && planoCentral[j] != null && count < 7; j++) {
+					dist = planoCentral[i].distancia(planoCentral[j]);
+					if (dist < toReturn.getDistancia()) {
+						toReturn.setDistancia(dist);
+						toReturn.setP1(planoCentral[i]);
+						toReturn.setP2(planoCentral[j]);
+					}
+					count++;
+				}
+			}
+		}
+
+		fin = System.currentTimeMillis();
+		toReturn.setTiempo(fin - ini);
+
+		return toReturn;
 	}
 }

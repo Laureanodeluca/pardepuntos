@@ -10,7 +10,7 @@ public class Heap<K,V> implements PriorityQueue<K,V>
 	@SuppressWarnings("unchecked")
 	public Heap(Comparator<K> c)
 	{
-		items = (Entrada<K,V> []) new Entrada[100];
+		items = (Entrada<K,V> []) new Entrada[1048576];
 		comp = c;
 		size = 0;
 	}
