@@ -62,7 +62,7 @@ public class Plano {
 	 
 		i=izq; j=m+1; k=izq;
 		  
-		while (i<=m && j<=der) //copia el siguiente elemento más chico                                      
+		while (i<=m && j<=der) //copia el siguiente elemento mÃ¡s chico                                      
 			   if (B[i].getY()<=B[j].getY())
 				   A[k++]=B[i++];
 			   else
@@ -117,7 +117,7 @@ public class Plano {
 		ini = new Date().getTime();
 
 		if (cantPuntos < 2) { // Si tenemos menos de dos puntos no podemos obtener un par de puntos, por lo
-								// que se retorna la distancia máxima
+								// que se retorna la distancia mÃ¡xima
 			toReturn.setP1(p1);
 			toReturn.setP2(p2);
 			toReturn.setDistancia(Double.MAX_VALUE);
@@ -127,7 +127,7 @@ public class Plano {
 			toReturn.setP1(p1);
 			toReturn.setP2(p2);
 			toReturn.setDistancia(p1.distancia(p2));
-		} else { // Si hay 3 o más puntos
+		} else { // Si hay 3 o mÃ¡s puntos
 			Par solIzq = new Par();
 			Par solDer = new Par();
 			Plano planoIzquierdo = new Plano();
@@ -163,7 +163,7 @@ public class Plano {
 			Punto pMedio = planoIzquierdo.getPuntos().last().element();
 
 			// HAY QUE ORDENAR LA LISTA EN BASE A LAS COORDENADAS Y EN T(n log n)
-			// HICE EL ARREGLO PARA HACER MERGE PERO PODEMOS VER SI HAY UNA FORMA MÁS EFICIENTE 
+			// HICE EL ARREGLO PARA HACER MERGE PERO PODEMOS VER SI HAY UNA FORMA MÃ�S EFICIENTE 
 			// ORDENARIA LA LISTA DIRECTAMENTE PERO NO ESTABA CON MANEJOS DE TDA PARA HACERLO
 			// ACLARACION: NO ESTOY SEGURA DEL ORDENAMIENTO. LO HICE QUE SE FIJE SOLAMENTE EN EL EJE Y. 
 			// VER SI ESTA BIEN QUE SOLO SE FIJE EN Y (YA QUE PREVIAMENTE LOS PUNTOS ESTABAN OREDENADOS SEGUN EL EJE X)

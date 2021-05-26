@@ -4,12 +4,24 @@ package logica;
 public class Par{
 
     //Clase que guarda los datos de una solucion concreta
-
+	
     private Punto p1; //Primer punto del par mas cercano
     private Punto p2; //Segundo punto del par mas cercano
     private double distancia; //Distancia entre los dos puntos de la solucion
     private long tiempo; //Tiempo requerido para hallar la opcion
 
+    public Par(Punto p1, Punto p2)
+	{
+		this.p1 = p1;
+		this.p2 = p2;
+	}
+    
+    public Par()
+    {
+    	this.p1 = null;
+    	this.p2 = null;
+    }
+    
     public Punto getP1() {
         return p1;
     }
