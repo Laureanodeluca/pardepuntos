@@ -16,7 +16,7 @@ public class Plano {
 	 * @param p Punto a insertar.
 	 */
 	public void addPunto(Punto p) {
-		puntos.addLast(p);
+		insertarOrdenado(p);
 	}
 	
 	private void insertarOrdenado(Punto p) {
