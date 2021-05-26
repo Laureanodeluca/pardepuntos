@@ -1,8 +1,6 @@
 package logica;
 
-import java.util.*;
 import TDALista.*;
-import java.util.concurrent.TimeUnit;
 
 public class Plano {
 
@@ -18,9 +16,9 @@ public class Plano {
 	 * @param p Punto a insertar.
 	 */
 	public void addPunto(Punto p) {
-		insertarOrdenado(p);
+		puntos.addLast(p);
 	}
-
+	
 	private void insertarOrdenado(Punto p) {
 		boolean insertado = false;
 		for (Position<Punto> q : puntos.positions()) {
@@ -115,7 +113,6 @@ public class Plano {
 	public Par menorDistanciaDivCon() {
 		Par toReturn = new Par();
 		long ini, fin;
-		double menorDistancia = Double.MAX_VALUE;
 		int cantPuntos = puntos.size();
 
 		Punto p1 = new Punto();
@@ -129,25 +126,29 @@ public class Plano {
 			toReturn.setP2(p2);
 			toReturn.setDistancia(Double.MAX_VALUE);
 		} else if (cantPuntos == 2) { // Si solo tenemos dos puntos, esa es la solucion
-			p1 = puntos.first().element();
-			p2 = puntos.last().element();
-			toReturn.setP1(p1);
-			toReturn.setP2(p2);
-			toReturn.setDistancia(p1.distancia(p2));
+			try
+			{
+				p1 = puntos.first().element();
+				p2 = puntos.last().element();
+				toReturn.setP1(p1);
+				toReturn.setP2(p2);
+				toReturn.setDistancia(p1.distancia(p2));
+			}
+			catch (EmptyListException e)
+			{
+				System.out.println(e.getMessage());
+			}
 		} else { // Si hay 3 o mas puntos
 			Par solIzq = new Par();
 			Par solDer = new Par();
 			Plano planoIzquierdo = new Plano();
 			Plano planoDerecho = new Plano();
 
-			// Se divide el plano en dos mitades y se encuentra solucion al plano izquierdo
-			// y al plano derecho
-			int mitad = puntos.size() / 2;
 			subList(planoIzquierdo, planoDerecho);
-
+			
 			solIzq = planoIzquierdo.menorDistanciaDivCon();
 			solDer = planoDerecho.menorDistanciaDivCon();
-
+			
 			// Se guarda la menor distancia entre las soluciuones obtenidas
 			if (solIzq.getDistancia() < solDer.getDistancia()) {
 				toReturn = solIzq;
@@ -157,11 +158,19 @@ public class Plano {
 
 			// Creamos el plano central a partir de la franja entre los dos planos
 			// anteriores
-			Punto pMedio = planoIzquierdo.getPuntos().last().element();
+			Punto pMedio = null;
+			try 
+			{
+				pMedio = planoIzquierdo.getPuntos().last().element();
+			} 
+			catch (EmptyListException e) 
+			{
+				System.out.println(e.getMessage());
+			}
 
 			// Ordenamos los puntos respecto a la coordenada Y
 			Punto a[] = obtenerArray();
-			mergesort(a, 0, a.length);
+			mergesort(a, 0, a.length-1);
 			int i, j, count = 0;
 			Punto planoCentral[] = new Punto[a.length];
 
@@ -177,7 +186,7 @@ public class Plano {
 
 			// Calculamos las distancias
 			double dist;
-			for (i = 0; i < planoCentral.length; i++) {
+			for (i = 0; i < planoCentral.length && planoCentral[i] != null; i++) {
 				count = 0;
 				for (j = i + 1; j < planoCentral.length && planoCentral[j] != null && count < 7; j++) {
 					dist = planoCentral[i].distancia(planoCentral[j]);
@@ -195,7 +204,6 @@ public class Plano {
 		toReturn.setTiempo(fin - ini);
 
 		return toReturn;
-
 	}
 
 	private Punto[] obtenerArray() {
@@ -208,7 +216,7 @@ public class Plano {
 		return a;
 	}
 
-	private PositionList<Punto> subList(Plano planoIzquierdo, Plano planoDerecho) {
+	private void subList(Plano planoIzquierdo, Plano planoDerecho) {
 		int i = 1;
 		for (Position<Punto> p : puntos.positions()) {
 			if (i <= puntos.size() / 2)
