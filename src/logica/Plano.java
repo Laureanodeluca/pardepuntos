@@ -45,6 +45,33 @@ public class Plano {
 		puntos = listaPuntos;
 	}
 
+	public void mergesort(Punto a[],int izq, int der){
+		if (izq < der){
+				int m=(izq+der)/2;
+				mergesort(a, izq, m);
+				mergesort(a, m+1, der);                                                                                
+				merge(a, izq, m, der);                                                                                 
+		}
+	}
+
+	public void merge(Punto A[], int izq, int m, int der){
+		int i, j, k;
+		Punto [] B = new Punto[A.length]; //array auxiliar
+		for (i=izq; i<=der; i++)      //copia ambas mitades en el array auxiliar                                       
+			 B[i]=A[i];
+	 
+		i=izq; j=m+1; k=izq;
+		  
+		while (i<=m && j<=der) //copia el siguiente elemento más chico                                      
+			   if (B[i].getY()<=B[j].getY())
+				   A[k++]=B[i++];
+			   else
+				   A[k++]=B[j++];
+			 
+		while (i<=m)         //copia los elementos que quedan de la
+			  A[k++]=B[i++]; //primera mitad (si los hay)
+	 }
+
 	/**
 	 * Obtiene el par de menor distancia. Chequea todos los pares de puntos.
 	 * 
@@ -132,25 +159,49 @@ public class Plano {
 
 			// Creamos el plano central a partir de la franja entre los dos planos
 			// anteriores
-			Plano planoCentral = new Plano();
+			// Plano planoCentral = new Plano(); ESTO SI LO HACEMOS CON LISTA
 			Punto pMedio = planoIzquierdo.getPuntos().last().element();
 
-			// HAY QUE ORDENAR LA LISTA EN BASE A LAS COORDENADAS Y
-
-			// NO ENTIENDO BIEN EL SENTIDO DE ORDENAR POR Y, VOY A VER MAÑANA
+			// HAY QUE ORDENAR LA LISTA EN BASE A LAS COORDENADAS Y EN T(n log n)
+			// HICE EL ARREGLO PARA HACER MERGE PERO PODEMOS VER SI HAY UNA FORMA MÁS EFICIENTE 
+			// ORDENARIA LA LISTA DIRECTAMENTE PERO NO ESTABA CON MANEJOS DE TDA PARA HACERLO
+			// ACLARACION: NO ESTOY SEGURA DEL ORDENAMIENTO. LO HICE QUE SE FIJE SOLAMENTE EN EL EJE Y. 
+			// VER SI ESTA BIEN QUE SOLO SE FIJE EN Y (YA QUE PREVIAMENTE LOS PUNTOS ESTABAN OREDENADOS SEGUN EL EJE X)
+			Punto a[]=obtenerArray();
+			mergesort(a, 0, a.length);
+			int i, j, count=0;
+			Punto planoCentral[]= new Punto[a.length];
+			
 
 			// Creamos una nueva lista que contendra aquellos puntos que cumplan que la
 			// diferencia en valor
 			// absoluto de su componente x y la componente x del punto medio sea menor a la
 			// distancia minima
-			/*
-			for (Position<Punto> p : puntos.positions()) {
+			/*for (Position<Punto> p : puntos.positions()) {
 				if (Math.abs(p.element().getX() - pMedio.getX()) < toReturn.getDistancia()) {
 					planoCentral.addPunto(p.element());
 				}
+			}*/
+			for(i=0; i<a.length;i++){
+				if (Math.abs(a[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
+					planoCentral[i]=a[i];
+				}
 			}
-			*/
 
+			//Calculamos las distancias
+			double dist;
+			for(i=0; i<planoCentral.length; i++){
+				count=0;
+				for(j=i+1; j<planoCentral.length && planoCentral[j]!=null &&count<7; j++){
+					dist=planoCentral[i].distancia(planoCentral[j]);
+					if(dist<toReturn.getDistancia()){
+						toReturn.setDistancia(dist);
+						toReturn.setP1(planoCentral[i]);
+						toReturn.setP2(planoCentral[j]);
+					}
+					count++;
+				}
+			}
 		}
 
 		fin = new Date().getTime();
@@ -158,5 +209,15 @@ public class Plano {
 
 		return toReturn;
 
+	}
+
+	private Punto[] obtenerArray(){
+		Punto a[]=new Punto[puntos.size()];
+		int i=0;
+		for (Position<Punto> p : puntos.positions()) {
+			a[i]=p.element();
+			i++;
+		}
+		return a;
 	}
 }

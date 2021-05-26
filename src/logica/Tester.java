@@ -28,9 +28,10 @@ public class Tester {
 		miPlano.addPunto(p9);
 		miPlano.addPunto(p10);
 
-		Punto[] menorDist = miPlano.menorDistanciaTodosLosPares();
-		System.out.println("Par de menor distancia: "+ toString(menorDist[0]) + "; " + toString(menorDist[1]));
-		System.out.println("Distancia: " + menorDist[0].distancia(menorDist[1]));
+		Par menorDist = miPlano.menorDistanciaTodosLosPares();
+		System.out.println("Par de menor distancia: "+ toString(menorDist.getP1()) + "; " + toString(menorDist.getP2()));
+		System.out.println("Distancia: " + menorDist.getDistancia());
+		System.out.println("Tiempo: " + menorDist.getTiempo());
 	}
 	
 	public static String toString(Punto p)
