@@ -8,7 +8,6 @@ public class Par{
     private Punto p1; //Primer punto del par mas cercano
     private Punto p2; //Segundo punto del par mas cercano
     private double distancia; //Distancia entre los dos puntos de la solucion
-    private long tiempo; //Tiempo requerido para hallar la opcion
 
     public Par(Punto p1, Punto p2)
 	{
@@ -44,13 +43,5 @@ public class Par{
 
     public void setDistancia(double distancia) {
         this.distancia = distancia;
-    }
-
-    public long getTiempo() {
-        return tiempo;
-    }
-    
-    public void setTiempo(long tiempo) {
-        this.tiempo = tiempo;
     }
 } 

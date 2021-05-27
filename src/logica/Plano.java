@@ -84,10 +84,8 @@ public class Plano {
 	 */
 	public Par menorDistanciaTodosLosPares() {
 		Par toReturn = new Par();
-		long ini, fin;
 		double menorDistancia = Double.MAX_VALUE;
 
-		ini = System.currentTimeMillis();
 
 		for (Position<Punto> p : puntos.positions()) {
 			for (Position<Punto> q : puntos.positions()) {
@@ -99,8 +97,6 @@ public class Plano {
 				}
 			}
 		}
-		fin = System.currentTimeMillis();
-		toReturn.setTiempo(fin - ini);
 
 		return toReturn;
 	}
@@ -112,13 +108,10 @@ public class Plano {
 	 */
 	public Par menorDistanciaDivCon() {
 		Par toReturn = new Par();
-		long ini, fin;
 		int cantPuntos = puntos.size();
 
 		Punto p1 = new Punto();
 		Punto p2 = new Punto();
-
-		ini = System.currentTimeMillis();
 
 		if (cantPuntos < 2) { // Si tenemos menos de dos puntos no podemos obtener un par de puntos, por lo
 								// que se retorna la distancia mÃ¡xima
@@ -200,10 +193,6 @@ public class Plano {
 				}
 			}
 		}
-
-		fin = System.currentTimeMillis();
-		toReturn.setTiempo(fin - ini);
-
 		return toReturn;
 	}
 
@@ -235,13 +224,11 @@ public class Plano {
 	 */
 	public Par menorDistanciaDivConOrdenado(Punto puntosY[]) {
 		Par toReturn = new Par();
-		long ini, fin;
 		int cantPuntos = puntos.size();
 
 		Punto p1 = new Punto();
 		Punto p2 = new Punto();
 
-		ini = System.currentTimeMillis();
 
 		if (cantPuntos < 2) { // Si tenemos menos de dos puntos no podemos obtener un par de puntos, por lo
 								// que se retorna la distancia mÃ¡xima
@@ -321,10 +308,6 @@ public class Plano {
 				}
 			}
 		}
-
-		fin = System.currentTimeMillis();
-		toReturn.setTiempo(fin - ini);
-
 		return toReturn;
 	}
 }
