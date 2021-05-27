@@ -171,7 +171,7 @@ public class Plano {
 			// Ordenamos los puntos respecto a la coordenada Y
 			Punto a[] = obtenerArray();
 			mergesort(a, 0, a.length-1);
-			int i, j, count = 0;
+			int i, j, count = 0, indPlanoCentral=0;
 			Punto planoCentral[] = new Punto[a.length];
 
 			// Creamos un nuevo arreglo que contendra aquellos puntos que cumplan que la
@@ -179,8 +179,11 @@ public class Plano {
 			// absoluto de su componente x y la componente x del punto medio sea menor a la
 			// distancia minima
 			for (i = 0; i < a.length; i++) {
-				if (Math.abs(a[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
-					planoCentral[i] = a[i];
+				if(!(a[i].getX()==pMedio.getX() && a[i].getY()==pMedio.getY())){		// Se comprueba que a[i] sea distinto del punto medio
+					if (Math.abs(a[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
+						planoCentral[indPlanoCentral] = a[i];
+						indPlanoCentral++;
+					}
 				}
 			}
 
