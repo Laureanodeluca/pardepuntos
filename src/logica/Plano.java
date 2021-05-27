@@ -297,11 +297,12 @@ public class Plano {
 			// diferencia en valor
 			// absoluto de su componente x y la componente x del punto medio sea menor a la
 			// distancia minima
-			int i, j, count = 0;
+			int i, j, count = 0, indPlanoCentral=0;;
 			Punto planoCentral[] = new Punto[puntosY.length];
 			for (i = 0; i < puntosY.length; i++) {
 				if (Math.abs(puntosY[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
-					planoCentral[i] = puntosY[i];
+					planoCentral[indPlanoCentral] = puntosY[i];
+					indPlanoCentral++;
 				}
 			}
 
