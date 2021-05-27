@@ -179,11 +179,9 @@ public class Plano {
 			// absoluto de su componente x y la componente x del punto medio sea menor a la
 			// distancia minima
 			for (i = 0; i < a.length; i++) {
-				if(!(a[i].getX()==pMedio.getX() && a[i].getY()==pMedio.getY())){		// Se comprueba que a[i] sea distinto del punto medio
-					if (Math.abs(a[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
-						planoCentral[indPlanoCentral] = a[i];
-						indPlanoCentral++;
-					}
+				if (Math.abs(a[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
+					planoCentral[indPlanoCentral] = a[i];
+					indPlanoCentral++;
 				}
 			}
 
