@@ -300,7 +300,7 @@ public class Plano {
 			int i, j, count = 0;
 			Punto planoCentral[] = new Punto[puntosY.length];
 			for (i = 0; i < puntosY.length; i++) {
-				if (Math.abs(puntosY[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
+				if ((puntosY[i] != null) && (Math.abs(puntosY[i].getX() - pMedio.getX()) < toReturn.getDistancia())) {
 					planoCentral[i] = puntosY[i];
 				}
 			}
