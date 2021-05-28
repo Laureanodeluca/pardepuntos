@@ -1,7 +1,10 @@
 package logica;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.HashSet;
+
 
 public class Plano {
 
@@ -197,16 +200,11 @@ public class Plano {
 			toReturn.setP2(p2);
 			toReturn.setDistancia(Double.MAX_VALUE);
 		} else if (cantPuntos == 2) { // Si solo tenemos dos puntos, esa es la solucion
-			try{
-				p1 = puntos.get(0);
-				p2 = puntos.get(1);
-				toReturn.setP1(p1);
-				toReturn.setP2(p2);
-				toReturn.setDistancia(p1.distancia(p2));
-			}
-			catch (IndexOutOfBoundsException e){
-				System.out.println(e.getMessage());
-			}
+			p1 = puntos.get(0);
+			p2 = puntos.get(1);
+			toReturn.setP1(p1);
+			toReturn.setP2(p2);
+			toReturn.setDistancia(p1.distancia(p2));
 		} else { // Si hay 3 o mas puntos
 			Par solIzq = new Par();
 			Par solDer = new Par();
@@ -215,8 +213,22 @@ public class Plano {
 
 			subList(planoIzquierdo, planoDerecho);
 			
-			solIzq = planoIzquierdo.menorDistanciaDivConOrdenado(puntosY);
-			solDer = planoDerecho.menorDistanciaDivConOrdenado(puntosY);
+			HashSet<Punto> setIzquierdo = new HashSet<Punto>(); 
+		    setIzquierdo.addAll(planoIzquierdo.getPuntos());
+		    setIzquierdo.retainAll(Arrays.asList(puntosY));
+		    
+		    HashSet<Punto> setDerecho = new HashSet<Punto>(); 
+		    setDerecho.addAll(planoDerecho.getPuntos());
+		    setDerecho.retainAll(Arrays.asList(puntosY));
+			
+		    Punto[] intersectionIzq = {};
+		    intersectionIzq = setIzquierdo.toArray(intersectionIzq);
+		    
+		    Punto[] intersectionDer = {};
+		    intersectionDer = setIzquierdo.toArray(intersectionDer);
+			
+			solIzq = planoIzquierdo.menorDistanciaDivConOrdenado(intersectionIzq);
+			solDer = planoDerecho.menorDistanciaDivConOrdenado(intersectionDer);
 			
 			// Se guarda la menor distancia entre las soluciuones obtenidas
 			if (solIzq.getDistancia() < solDer.getDistancia()) 

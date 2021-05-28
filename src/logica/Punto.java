@@ -1,7 +1,7 @@
 package logica;
 import java.lang.Math;
 
-public class Punto 
+public class Punto implements Comparable<Punto> 
 {
 	private double x;
 	private double y;
@@ -36,5 +36,10 @@ public class Punto
 	public double distancia(Punto p)
 	{
 		return Math.sqrt(Math.pow(p.getX() - x, 2) + Math.pow(p.getY() - y, 2));
+	}
+
+	@Override
+	public int compareTo(Punto p2) {
+		return 0;
 	}
 }
