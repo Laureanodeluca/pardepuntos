@@ -11,32 +11,6 @@ public class Plano {
 		puntos = new ArrayList<Punto>();
 	}
 
-	/**
-	 * Inserta un punto en la lista de puntos, ordenado por el eje x.
-	 * 
-	 * @param p Punto a insertar.
-	 */
-	/*public void addPunto(Punto p) {
-		insertarOrdenado(p);
-	}
-	
-	private void insertarOrdenado(Punto p) {
-		boolean insertado = false;
-		for (Position<Punto> q : puntos.positions()) {
-			try {
-				if (q.element().getX() >= p.getX()) {
-					insertado = true;
-					puntos.addBefore(q, p);
-					break;
-				}
-			} catch (InvalidPositionException e) {
-				System.out.println(e.getMessage());
-			}
-		}
-		if (!insertado)
-			puntos.addLast(p);
-	}*/
-
 	public void addLast(Punto p) {
 		puntos.add(p);
 	}
@@ -158,9 +132,17 @@ public class Plano {
 			}
 
 			// Ordenamos los puntos respecto a la coordenada Y
-			Punto planoCentral[] = obtenerArray(pMedio , toReturn);
-			mergesort(planoCentral, 0, planoCentral.length-1);
-			int i, j, count = 0;
+			Punto a[] = obtenerArray();
+			mergesort(a, 0, a.length-1);
+			int i, j, count = 0, indPlanoCentral=0;
+			Punto planoCentral[] = new Punto[a.length];
+			
+			for (i = 0; i < a.length; i++) {
+				if (Math.abs(a[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
+					planoCentral[indPlanoCentral] = a[i];
+					indPlanoCentral++;
+				}
+			}
 			
 			// Calculamos las distancias
 			double dist;
@@ -180,16 +162,12 @@ public class Plano {
 		return toReturn;
 	}
 
-	private Punto[] obtenerArray(Punto pMedio, Par toReturn) {
+	private Punto[] obtenerArray() {
 		Punto a[] = new Punto[puntos.size()];
 		int i = 0;
 		for (Punto p : puntos) {
-			if( Math.abs(p.getX() - pMedio.getX()) < toReturn.getDistancia() ) {
 				a[i] = p;
 				i++;
-			}
-			if(p.getX() > ( pMedio.getX() + toReturn.getDistancia() ))
-				return a;	
 		}
 		return a;
 	}
