@@ -286,31 +286,4 @@ public class Plano {
 		}
 		return toReturn;
 	}
-}		// distancia minima
-			int i, j, count = 0, indPlanoCentral=0;;
-			Punto planoCentral[] = new Punto[puntosY.length];
-			for (i = 0; i < puntosY.length; i++) {
-				if ((puntosY[i] != null) && (Math.abs(puntosY[i].getX() - pMedio.getX()) < toReturn.getDistancia())) {
-					planoCentral[indPlanoCentral] = puntosY[i];
-					indPlanoCentral++;
-				}
-			}
-
-			// Calculamos las distancias
-			double dist;
-			for (i = 0; i < planoCentral.length && planoCentral[i] != null; i++) {
-				count = 0;
-				for (j = i + 1; j < planoCentral.length && planoCentral[j] != null && count < 7; j++) {
-					dist = planoCentral[i].distancia(planoCentral[j]);
-					if (dist < toReturn.getDistancia()) {
-						toReturn.setDistancia(dist);
-						toReturn.setP1(planoCentral[i]);
-						toReturn.setP2(planoCentral[j]);
-					}
-					count++;
-				}
-			}
-		}
-		return toReturn;
-	}
 }
