@@ -1,13 +1,14 @@
 package logica;
 
-import TDALista.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Plano {
 
-	private PositionList<Punto> puntos;
+	private List<Punto> puntos;
 
 	public Plano() {
-		puntos = new DoubleLinkedList<Punto>();
+		puntos = new ArrayList<Punto>();
 	}
 
 	/**
@@ -37,14 +38,14 @@ public class Plano {
 	}*/
 
 	public void addLast(Punto p) {
-		puntos.addLast(p);
+		puntos.add(p);
 	}
 
-	public PositionList<Punto> getPuntos() {
+	public List<Punto> getPuntos() {
 		return puntos;
 	}
 
-	public void setPuntos(PositionList<Punto> listaPuntos) {
+	public void setPuntos(List<Punto> listaPuntos) {
 		puntos = listaPuntos;
 	}
 
@@ -86,18 +87,17 @@ public class Plano {
 		Par toReturn = new Par();
 		double menorDistancia = Double.MAX_VALUE;
 
-
-		for (Position<Punto> p : puntos.positions()) {
-			for (Position<Punto> q : puntos.positions()) {
-				if ((p.element() != q.element()) && (p.element().distancia(q.element()) < menorDistancia)) {
-					menorDistancia = p.element().distancia(q.element());
-					toReturn.setP1(p.element());
-					toReturn.setP2(q.element());
+		for (Punto p : puntos) {
+			for (Punto q : puntos) {
+				if ((p != q) && (p.distancia(q) < menorDistancia)) {
+					menorDistancia = p.distancia(q);
+					toReturn.setP1(p);
+					toReturn.setP2(q);
 					toReturn.setDistancia(menorDistancia);
 				}
 			}
 		}
-
+		
 		return toReturn;
 	}
 
@@ -119,16 +119,14 @@ public class Plano {
 			toReturn.setP2(p2);
 			toReturn.setDistancia(Double.MAX_VALUE);
 		} else if (cantPuntos == 2) { // Si solo tenemos dos puntos, esa es la solucion
-			try
-			{
-				p1 = puntos.first().element();
-				p2 = puntos.last().element();
+			try{
+				p1 = puntos.get(0); //primer elemento de la lista
+				p2 = puntos.get(1); //ultimo elemento de la lista
 				toReturn.setP1(p1);
 				toReturn.setP2(p2);
 				toReturn.setDistancia(p1.distancia(p2));
 			}
-			catch (EmptyListException e)
-			{
+			catch (IndexOutOfBoundsException e){
 				System.out.println(e.getMessage());
 			}
 		} else { // Si hay 3 o mas puntos
@@ -143,41 +141,27 @@ public class Plano {
 			solDer = planoDerecho.menorDistanciaDivCon();
 			
 			// Se guarda la menor distancia entre las soluciuones obtenidas
-			if (solIzq.getDistancia() < solDer.getDistancia()) {
+			if (solIzq.getDistancia() < solDer.getDistancia()) 
 				toReturn = solIzq;
-			} else {
+			else 
 				toReturn = solDer;
-			}
+			
 
 			// Creamos el plano central a partir de la franja entre los dos planos
 			// anteriores
 			Punto pMedio = null;
-			try 
-			{
-				pMedio = planoIzquierdo.getPuntos().last().element();
+			try {
+				pMedio = planoIzquierdo.getPuntos().get(planoIzquierdo.getPuntos().size()-1);
 			} 
-			catch (EmptyListException e) 
-			{
+			catch (IndexOutOfBoundsException e) {
 				System.out.println(e.getMessage());
 			}
 
 			// Ordenamos los puntos respecto a la coordenada Y
-			Punto a[] = obtenerArray();
-			mergesort(a, 0, a.length-1);
-			int i, j, count = 0, indPlanoCentral=0;
-			Punto planoCentral[] = new Punto[a.length];
-
-			// Creamos un nuevo arreglo que contendra aquellos puntos que cumplan que la
-			// diferencia en valor
-			// absoluto de su componente x y la componente x del punto medio sea menor a la
-			// distancia minima
-			for (i = 0; i < a.length; i++) {
-				if (Math.abs(a[i].getX() - pMedio.getX()) < toReturn.getDistancia()) {
-					planoCentral[indPlanoCentral] = a[i];
-					indPlanoCentral++;
-				}
-			}
-
+			Punto planoCentral[] = obtenerArray(pMedio , toReturn);
+			mergesort(planoCentral, 0, planoCentral.length-1);
+			int i, j, count = 0;
+			
 			// Calculamos las distancias
 			double dist;
 			for (i = 0; i < planoCentral.length && planoCentral[i] != null; i++) {
@@ -196,25 +180,24 @@ public class Plano {
 		return toReturn;
 	}
 
-	private Punto[] obtenerArray() {
+	private Punto[] obtenerArray(Punto pMedio, Par toReturn) {
 		Punto a[] = new Punto[puntos.size()];
 		int i = 0;
-		for (Position<Punto> p : puntos.positions()) {
-			a[i] = p.element();
-			i++;
+		for (Punto p : puntos) {
+			if( Math.abs(p.getX() - pMedio.getX()) < toReturn.getDistancia() ) {
+				a[i] = p;
+				i++;
+			}
+			if(p.getX() > ( pMedio.getX() + toReturn.getDistancia() ))
+				return a;	
 		}
 		return a;
 	}
 
 	private void subList(Plano planoIzquierdo, Plano planoDerecho) {
-		int i = 1;
-		for (Position<Punto> p : puntos.positions()) {
-			if (i <= puntos.size() / 2)
-				planoIzquierdo.addLast(p.element());
-			else
-				planoDerecho.addLast(p.element());
-			i++;
-		}
+		planoIzquierdo.setPuntos(puntos.subList(0, Math.round(puntos.size()/2)));
+		planoDerecho.setPuntos(puntos.subList(Math.round(puntos.size()/2)+1, puntos.size()));
+		
 	}
 
 	/**
@@ -236,16 +219,14 @@ public class Plano {
 			toReturn.setP2(p2);
 			toReturn.setDistancia(Double.MAX_VALUE);
 		} else if (cantPuntos == 2) { // Si solo tenemos dos puntos, esa es la solucion
-			try
-			{
-				p1 = puntos.first().element();
-				p2 = puntos.last().element();
+			try{
+				p1 = puntos.get(0);
+				p2 = puntos.get(1);
 				toReturn.setP1(p1);
 				toReturn.setP2(p2);
 				toReturn.setDistancia(p1.distancia(p2));
 			}
-			catch (EmptyListException e)
-			{
+			catch (IndexOutOfBoundsException e){
 				System.out.println(e.getMessage());
 			}
 		} else { // Si hay 3 o mas puntos
@@ -260,23 +241,18 @@ public class Plano {
 			solDer = planoDerecho.menorDistanciaDivConOrdenado(puntosY);
 			
 			// Se guarda la menor distancia entre las soluciuones obtenidas
-			if (solIzq.getDistancia() < solDer.getDistancia()) {
+			if (solIzq.getDistancia() < solDer.getDistancia()) 
 				toReturn = solIzq;
-			} else {
+			else 
 				toReturn = solDer;
-			}
-
+			
 			// Creamos el plano central a partir de la franja entre los dos planos
 			// anteriores
 			Punto pMedio = null;
-			try 
-			{
-				pMedio = planoIzquierdo.getPuntos().last().element();
+			try {
+				pMedio = planoIzquierdo.getPuntos().get(planoIzquierdo.getPuntos().size()-1);
 			} 
-			catch (EmptyListException e) 
-			{
-				System.out.println(e.getMessage());
-			}
+			catch (IndexOutOfBoundsException e) {System.out.println(e.getMessage());}
 
 			
 
@@ -284,6 +260,33 @@ public class Plano {
 			// diferencia en valor
 			// absoluto de su componente x y la componente x del punto medio sea menor a la
 			// distancia minima
+			int i, j, count = 0, indPlanoCentral=0;;
+			Punto planoCentral[] = new Punto[puntosY.length];
+			for (i = 0; i < puntosY.length; i++) {
+				if ((puntosY[i] != null) && (Math.abs(puntosY[i].getX() - pMedio.getX()) < toReturn.getDistancia())) {
+					planoCentral[indPlanoCentral] = puntosY[i];
+					indPlanoCentral++;
+				}
+			}
+
+			// Calculamos las distancias
+			double dist;
+			for (i = 0; i < planoCentral.length && planoCentral[i] != null; i++) {
+				count = 0;
+				for (j = i + 1; j < planoCentral.length && planoCentral[j] != null && count < 7; j++) {
+					dist = planoCentral[i].distancia(planoCentral[j]);
+					if (dist < toReturn.getDistancia()) {
+						toReturn.setDistancia(dist);
+						toReturn.setP1(planoCentral[i]);
+						toReturn.setP2(planoCentral[j]);
+					}
+					count++;
+				}
+			}
+		}
+		return toReturn;
+	}
+}		// distancia minima
 			int i, j, count = 0, indPlanoCentral=0;;
 			Punto planoCentral[] = new Punto[puntosY.length];
 			for (i = 0; i < puntosY.length; i++) {
