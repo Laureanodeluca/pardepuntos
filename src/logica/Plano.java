@@ -191,7 +191,6 @@ public class Plano {
 		Punto p1 = new Punto();
 		Punto p2 = new Punto();
 
-
 			if (cantPuntos < 2) { 							// Si tenemos menos de dos puntos no podemos obtener un par de puntos, por lo
 															// que se retorna la distancia mÃ¡xima
 			toReturn.setP1(p1);
@@ -211,8 +210,8 @@ public class Plano {
 
 			subList(planoIzquierdo, planoDerecho);
 			
-			ArrayList<Punto> ordenadoIzqY = new ArrayList<Punto>(puntosY);
-			ArrayList<Punto> ordenadoDerY = new ArrayList<Punto>(puntosY);
+			ArrayList<Punto> ordenadoIzqY = new ArrayList<Punto>(puntosY); 
+			ArrayList<Punto> ordenadoDerY = new ArrayList<Punto>(puntosY); 
 			
 			ordenadoIzqY.removeAll(planoDerecho.getPuntos());
 			ordenadoDerY.removeAll(planoIzquierdo.getPuntos());
@@ -232,9 +231,7 @@ public class Plano {
 			try {
 				pMedio = planoIzquierdo.getPuntos().get(planoIzquierdo.getPuntos().size()-1);
 			} 
-			catch (IndexOutOfBoundsException e) {System.out.println(e.getMessage());}
-
-			
+			catch (IndexOutOfBoundsException e) {System.out.println(e.getMessage());}			
 
 			// Creamos un nuevo arreglo que contendra aquellos puntos que cumplan que la
 			// diferencia en valor

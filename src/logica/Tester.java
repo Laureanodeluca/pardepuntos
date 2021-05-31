@@ -31,7 +31,7 @@ public class Tester {
 				miPlano.addLast(p);
 			}
 			endTime = System.currentTimeMillis();
-			System.out.println("          Fin de la inserci�n. Tiempo: "+(endTime - startTime)+"ms");
+			System.out.println("          Fin de la insercion. Tiempo: "+(endTime - startTime)+"ms");
 			startTime = System.currentTimeMillis();
 			Par menorDist = miPlano.menorDistanciaTodosLosPares();
 			endTime = System.currentTimeMillis();
@@ -45,7 +45,7 @@ public class Tester {
 		System.out.println("============ INICIO DEL TEST: FUERZA DIVIDIR Y CONQUISTAR ===============");
 		i = 2;
 
-		while (i <= Math.pow(2, 13))
+		while (i <= Math.pow(2, 20))
 		{
 			System.out.println("     "+i+" puntos:");
 			miPlano = new Plano();
@@ -73,7 +73,7 @@ public class Tester {
 				miPlano.addLast(queueX.poll());
 			}
 			endTime = System.currentTimeMillis();
-			System.out.println("          Fin de la inserci�n. Tiempo: "+(endTime - startTime)+"ms");
+			System.out.println("          Fin de la insercion. Tiempo: "+(endTime - startTime)+"ms");
 
 			startTime = System.currentTimeMillis();
 			Par menorDist = miPlano.menorDistanciaDivCon();
@@ -131,7 +131,7 @@ public class Tester {
 				indiceY++;
 			}
 			endTime = System.currentTimeMillis();
-			System.out.println("          Fin de la inserci�n. Tiempo: "+(endTime - startTime)+"ms");
+			System.out.println("          Fin de la insercion. Tiempo: "+(endTime - startTime)+"ms");
 
 			ArrayList<Punto> l = new ArrayList<Punto>(Arrays.asList(ordenadoY));
 			startTime = System.currentTimeMillis();
