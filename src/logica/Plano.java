@@ -1,9 +1,7 @@
 package logica;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.HashSet;
 
 
 public class Plano {
@@ -186,7 +184,7 @@ public class Plano {
 	 * 
 	 * @return Par de puntos de menor distancia.
 	 */
-	public Par menorDistanciaDivConOrdenado(Punto puntosY[]) {
+	public Par menorDistanciaDivConOrdenado(ArrayList<Punto> puntosY) {
 		Par toReturn = new Par();
 		int cantPuntos = puntos.size();
 
@@ -194,18 +192,18 @@ public class Plano {
 		Punto p2 = new Punto();
 
 
-		if (cantPuntos < 2) { // Si tenemos menos de dos puntos no podemos obtener un par de puntos, por lo
-								// que se retorna la distancia mÃ¡xima
+			if (cantPuntos < 2) { 							// Si tenemos menos de dos puntos no podemos obtener un par de puntos, por lo
+															// que se retorna la distancia mÃ¡xima
 			toReturn.setP1(p1);
 			toReturn.setP2(p2);
 			toReturn.setDistancia(Double.MAX_VALUE);
-		} else if (cantPuntos == 2) { // Si solo tenemos dos puntos, esa es la solucion
+		} else if (cantPuntos == 2) { 						// Si solo tenemos dos puntos, esa es la solucion
 			p1 = puntos.get(0);
 			p2 = puntos.get(1);
 			toReturn.setP1(p1);
 			toReturn.setP2(p2);
 			toReturn.setDistancia(p1.distancia(p2));
-		} else { // Si hay 3 o mas puntos
+		} else { 											// Si hay 3 o mas puntos
 			Par solIzq = new Par();
 			Par solDer = new Par();
 			Plano planoIzquierdo = new Plano();
@@ -213,22 +211,14 @@ public class Plano {
 
 			subList(planoIzquierdo, planoDerecho);
 			
-			HashSet<Punto> setIzquierdo = new HashSet<Punto>(); 
-		    setIzquierdo.addAll(planoIzquierdo.getPuntos());
-		    setIzquierdo.retainAll(Arrays.asList(puntosY));
-		    
-		    HashSet<Punto> setDerecho = new HashSet<Punto>(); 
-		    setDerecho.addAll(planoDerecho.getPuntos());
-		    setDerecho.retainAll(Arrays.asList(puntosY));
+			ArrayList<Punto> ordenadoIzqY = new ArrayList<Punto>(puntosY);
+			ArrayList<Punto> ordenadoDerY = new ArrayList<Punto>(puntosY);
 			
-		    Punto[] intersectionIzq = {};
-		    intersectionIzq = setIzquierdo.toArray(intersectionIzq);
-		    
-		    Punto[] intersectionDer = {};
-		    intersectionDer = setIzquierdo.toArray(intersectionDer);
+			ordenadoIzqY.removeAll(planoDerecho.getPuntos());
+			ordenadoDerY.removeAll(planoIzquierdo.getPuntos());
 			
-			solIzq = planoIzquierdo.menorDistanciaDivConOrdenado(intersectionIzq);
-			solDer = planoDerecho.menorDistanciaDivConOrdenado(intersectionDer);
+			solIzq = planoIzquierdo.menorDistanciaDivConOrdenado(ordenadoIzqY);
+			solDer = planoDerecho.menorDistanciaDivConOrdenado(ordenadoDerY);
 			
 			// Se guarda la menor distancia entre las soluciuones obtenidas
 			if (solIzq.getDistancia() < solDer.getDistancia()) 
@@ -251,10 +241,10 @@ public class Plano {
 			// absoluto de su componente x y la componente x del punto medio sea menor a la
 			// distancia minima
 			int i, j, count = 0, indPlanoCentral=0;;
-			Punto planoCentral[] = new Punto[puntosY.length];
-			for (i = 0; i < puntosY.length; i++) {
-				if ((puntosY[i] != null) && (Math.abs(puntosY[i].getX() - pMedio.getX()) < toReturn.getDistancia())) {
-					planoCentral[indPlanoCentral] = puntosY[i];
+			Punto planoCentral[] = new Punto[puntosY.size()];
+			for (i = 0; i < puntosY.size(); i++) {
+				if ((puntosY.get(i) != null) && (Math.abs(puntosY.get(i).getX() - pMedio.getX()) < toReturn.getDistancia())) {
+					planoCentral[indPlanoCentral] = puntosY.get(i);
 					indPlanoCentral++;
 				}
 			}

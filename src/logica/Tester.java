@@ -1,6 +1,9 @@
 package logica;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.PriorityQueue;
 
 @SuppressWarnings("unused")
@@ -130,8 +133,9 @@ public class Tester {
 			endTime = System.currentTimeMillis();
 			System.out.println("          Fin de la inserci�n. Tiempo: "+(endTime - startTime)+"ms");
 
+			ArrayList<Punto> l = new ArrayList<Punto>(Arrays.asList(ordenadoY));
 			startTime = System.currentTimeMillis();
-			Par menorDist = miPlano.menorDistanciaDivConOrdenado(ordenadoY);
+			Par menorDist = miPlano.menorDistanciaDivConOrdenado(l);
 			endTime = System.currentTimeMillis();
 			
 			System.out.println("          Par de menor distancia: "+ toString(menorDist.getP1()) + "; " + toString(menorDist.getP2()));
